@@ -1,0 +1,346 @@
+import telebot
+from telebot import types
+from time import sleep
+# Создаем объект бота и передаем ему токен нашего бота
+bot = telebot.TeleBot('6689311820:AAHQ6A1jJfm3USxTvljRIBZ0GVWz1hqs0Nc')
+
+point = 0
+max_point = -100
+attempt = 0
+
+# Обработчик команды /start
+@bot.message_handler(commands=['start'])
+def start_message(message):
+# Отправляем сообщение пользователю
+    
+    file = open('./channels4_profile.jpg', 'rb')
+    
+    line = types.InlineKeyboardMarkup()
+    line.add(types.InlineKeyboardButton("Немного о вдохновителях", callback_data='Вдохновители_меню'))
+
+    bot.send_message(message.chat.id, 'Привет! Ты попал в бота вдохновителей!')
+    bot.send_photo(message.chat.id, file, reply_markup=line)
+
+
+#Тест с вдохновителем(пример гагарин)
+@bot.message_handler(commands=['gagarin'])
+def yuri_gagar(message):
+
+    global point, attempt 
+    print(attempt)
+    if attempt == 0:
+
+        point = 0
+        bot.send_message(message.chat.id, 'Давай пройдём небольшой тест, который связан с великим Юрием Гагариным.', reply_markup=types.ReplyKeyboardRemove())
+        #тут уже убрана клавиатура добавить наличие кнопки в меню и добавить тест с кнопками 3-6 кнопок на каждый вопрос
+        first_question(message)
+        attempt +=1
+
+    elif attempt == 1 or attempt == 2:
+
+        point = 0
+        bot.send_message(message.chat.id, 'Постарайся улучшить свой предыдущий результат!', reply_markup=types.ReplyKeyboardRemove())
+        #тут уже убрана клавиатура добавить наличие кнопки в меню и добавить тест с кнопками 3-6 кнопок на каждый вопрос
+        first_question(message)
+        attempt +=1
+        #распределение по вопросам
+    else:
+
+        bot.send_message(message.chat.id, 'Вы уже сделали максимально допустимое количество попыток!', reply_markup=types.ReplyKeyboardRemove())
+        menu(message)
+
+
+def func_questions(message):
+    global point, attempt
+    
+    
+    if message.text == "Собаки":
+
+        bot.send_message(message.chat.id, 'Верно! А знал ли ты, что помимо собак в космосе побывали мыши, крысы, морские свинки, обезьяны, черепахи, кролики, лягушки, улитки, рыбки, насекомые, микроорганизмы. Только на 11 спутниках «Бион» совершили космическое путешествие 12 обезьян и 212 крыс. Лягушки первыми из позвоночных животных побывали в космосе.', reply_markup=types.ReplyKeyboardRemove())     
+        point +=1
+        bot.send_photo(message.chat.id, open('./b_s.jpg', 'rb'))
+        sleep(1)
+        second_question(message)
+
+
+    elif message.text == 'Кошки' or message.text == 'Белки':
+        
+        bot.send_message(message.chat.id, 'Неверно, 19 августа 1960 года был осуществлен успешный запуск космического корабля «Спутник-5», на борту которого находились собаки Белка и Стрелка — советские собаки-космонавты, первые животные, которые совершили орбитальный космический полёт и вернулись на Землю невредимыми.', reply_markup=types.ReplyKeyboardRemove())    
+        bot.send_photo(message.chat.id, open('./b_s.jpg', 'rb'))
+        sleep(1)
+        second_question(message)
+
+    elif message.text == 'Космический корабль Восток-1':
+        
+        bot.send_message(message.chat.id, 'Верно! И в тот самый день – 12 апреля 1961 года, старший лейтенант Юрий Гагарин на корабле "Восток-1" облетел Землю на высоте 302 километра и со скоростью около 28 тысяч километров в час. Его полет длился 108 минут. Но эти минуты изменили мир. «Облетев Землю в корабле-спутнике, я увидел, как прекрасна наша планета.', reply_markup=types.ReplyKeyboardRemove())
+        point +=1
+        bot.send_photo(message.chat.id, open('./Vostok.jpg', 'rb'))
+        sleep(1)
+        third_question(message)
+
+    elif message.text == 'Ракета носитель Восток' or message.text == 'Космический корабль Союз-1':
+
+        bot.send_message(message.chat.id, 'Неверно, И в тот самый день – 12 апреля 1961 года, старший лейтенант Юрий Гагарин на корабле "Восток-1" облетел Землю на высоте 302 километра и со скоростью около 28 тысяч километров в час. Его полет длился 108 минут. Но эти минуты изменили мир. «Облетев Землю в корабле-спутнике, я увидел, как прекрасна наша планета.', reply_markup=types.ReplyKeyboardRemove())
+        bot.send_photo(message.chat.id, open('./Vostok.jpg', 'rb'))
+        sleep(1)
+        third_question(message)
+
+    elif message.text =='Поехали!':
+
+        bot.send_message(message.chat.id, 'Верно! «И, когда включились двигатели, когда ракета начала подниматься со стартового стола, я, чтобы разрядить обстановку, постарался таким бодрым, обыкновенным голосом сказать: „Поехали!"» — признался он.', reply_markup=types.ReplyKeyboardRemove())
+        point+=1
+        bot.send_photo(message.chat.id, open('./scale.jpg', 'rb'))
+        sleep(1)
+        fourth_question(message)
+    
+    elif message.text == 'Экипаж, взлетаю!' or message.text == 'Земля прощай!':
+        
+        bot.send_message(message.chat.id, 'Неверно! «И, когда включились двигатели, когда ракета начала подниматься со стартового стола, я, чтобы разрядить обстановку, постарался таким бодрым, обыкновенным голосом сказать: „Поехали!"» — признался он.', reply_markup=types.ReplyKeyboardRemove())
+        bot.send_photo(message.chat.id, open('./scale.jpg', 'rb'))
+        sleep(1)
+        fourth_question(message)
+    
+    elif message.text == 'Герой Совесткого союза':
+        
+        bot.send_message(message.chat.id,'Верно! На приёме в Кремле 14 апреля 1961 года Гагарину были вручены медаль «Золотая Звезда» Героя Советского Союза и орден Ленина, а также он получил воинское звание майора ВВС, лётный знак Военный лётчик 1-го класса, почётное звание Лётчик-космонавт СССР.' , reply_markup=types.ReplyKeyboardRemove())
+        bot.send_photo(message.chat.id, open('./hero.jpg', 'rb')) 
+        point +=1
+        sleep(1)
+        fifth_question(message)
+
+    elif message.text == 'Герой социалистического труда' or message.text == 'Герой России':
+    
+        bot.send_message(message.chat.id, 'Неверно! На приёме в Кремле 14 апреля 1961 года Гагарину были вручены медаль «Золотая Звезда» Героя Советского Союза и орден Ленина. Он получил воинское звание майора ВВС, лётный знак Военный лётчик 1-го класса, почётное звание Лётчик-космонавт СССР.', reply_markup=types.ReplyKeyboardRemove())
+        bot.send_photo(message.chat.id, open('./hero.jpg', 'rb'))
+        sleep(1)
+        fifth_question(message)
+    
+    elif message.text == 'День космонавтики':
+
+        bot.send_message(message.chat.id, 'Верно! День космонавтики — отмечаемая сначала в СССР, а после в России и других странах постсоветского пространства 12 апреля, дата, установленная в ознаменование первого полёта человека в космос.', reply_markup=types.ReplyKeyboardRemove())
+        bot.send_photo(message.chat.id, open('./den_cosmo.jpg', 'rb')) 
+        point+=1
+        sleep(1)
+        results_test(message)
+
+    elif message.text == 'День летчика' or message.text == 'День Земли':
+
+        bot.send_message(message.chat.id, 'Неверно! День космонавтики — отмечаемая сначала в СССР, а после в России и других странах постсоветского пространства 12 апреля, дата, установленная в ознаменование первого полёта человека в космос.', reply_markup=types.ReplyKeyboardRemove())
+        bot.send_photo(message.chat.id, open('./den_cosmo.jpg', 'rb')) 
+        sleep(1)
+        results_test(message)
+
+    
+def results_test(message):
+
+    global point, attempt, max_point
+
+    if point > max_point:
+        max_point = point
+
+    bot.send_message(message.chat.id, f'Спасибо за прохождение теста! У тебя закончились попытки! Твой результат составляет {point} очков! \nМаксимальный результат: {max_point}')
+    bot.send_photo(message.chat.id, open('./result.jpg', 'rb'))
+    sleep(2)
+    menu(message)
+
+
+    # запуск теста
+
+
+def first_question(message):
+     
+    markup = types.ReplyKeyboardMarkup()
+        
+    ans1 = types.KeyboardButton('Кошки')
+    ans2 = types.KeyboardButton('Собаки')
+    ans3 = types.KeyboardButton('Белки')
+        
+    markup.row(ans1, ans2)
+    markup.row(ans3)
+    bot.send_message(message.chat.id, "Какие животные совершили космический полёт и успешно вернулись на Землю, еще до полета человека?", reply_markup=markup)
+
+    bot.register_next_step_handler(message, func_questions)
+
+
+def second_question(message):
+     
+    markup = types.ReplyKeyboardMarkup()
+        
+    ans1 = types.KeyboardButton('Космический корабль Союз-1')
+    ans2 = types.KeyboardButton('Ракета носитель Восток')
+    ans3 = types.KeyboardButton('Космический корабль Восток-1')
+        
+    markup.row(ans1, ans2)
+    markup.row(ans3)
+    bot.send_message(message.chat.id, "На чем облетел нашу планету первый космонавт Юрий Гагарин?", reply_markup=markup)
+
+    bot.register_next_step_handler(message, func_questions)
+
+
+def third_question(message):
+     
+    markup = types.ReplyKeyboardMarkup()
+        
+    ans1 = types.KeyboardButton('Экипаж, взлетаю!')
+    ans2 = types.KeyboardButton('Поехали!')
+    ans3 = types.KeyboardButton('Земля прощай!')
+        
+    markup.row(ans1, ans2)
+    markup.row(ans3)
+    bot.send_message(message.chat.id, "Какую фразу сказал Юрий Гагарин во время старта своего первого полета в космос?", reply_markup=markup)
+
+    bot.register_next_step_handler(message, func_questions)
+
+
+def fourth_question(message):
+     
+    markup = types.ReplyKeyboardMarkup()
+        
+    ans1 = types.KeyboardButton('Герой Совесткого союза')
+    ans2 = types.KeyboardButton('Герой социалистического труда')
+    ans3 = types.KeyboardButton('Герой России')
+        
+    markup.row(ans1, ans2)
+    markup.row(ans3)
+    bot.send_message(message.chat.id, "Какое звание присвоили Юрию Гагарину за то, что он первым из землян совершил космический полет?", reply_markup=markup)
+
+    bot.register_next_step_handler(message, func_questions)
+
+
+def fifth_question(message):
+     
+    markup = types.ReplyKeyboardMarkup()
+        
+    ans1 = types.KeyboardButton('День летчика')
+    ans2 = types.KeyboardButton('День космонавтики')
+    ans3 = types.KeyboardButton('День Земли')
+        
+    markup.row(ans1, ans2)
+    markup.row(ans3)
+    bot.send_message(message.chat.id, "Какой праздник отмечается в нашей стране, в честь первого полета в космос Юрия Гагарина?", reply_markup=markup)
+
+    bot.register_next_step_handler(message, func_questions)
+
+
+# обработка текста "в меню"
+@bot.message_handler(func=lambda message: message.text=="В меню")
+def mes_menu(message):
+    
+    menu(message)
+
+# обработка колбек
+@bot.callback_query_handler(func=lambda callback: True)
+def callback_message(callback):
+
+    photo_ruslan_bairamov = open('./photo_ruslan_bairamov.jpg', 'rb')
+    photo_Vyazun_Anna = open('./Vyazun_Anna.png', 'rb')
+
+    if callback.data =='Вдохновители_меню':
+
+        menu(callback.message)
+
+    elif callback.data == 'РусланБайрамов':
+
+
+        line = types.InlineKeyboardMarkup()
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+        bot.send_message(callback.message.chat.id, 'Руслан Байрамов ещё ходил в детсад, когда его папа повесил дома карту мира. Уже к 11 годам он знал назубок почти все страны с их столицами, а школу закончил отличником с одной четвёркой, которую получил от мамы. Он – человек вне культур и вне времени: папа – азербайджанец, мама – русская, работали учителями в азербайджанском селе Новое Ивановское, которое основал его дед – старовер Григорий Иванов. Когда Руслану исполнится 37, он создаст собственный город дружбы народов «Этномир».', reply_markup=markup)
+                      
+        line.add(types.InlineKeyboardButton("Подробнее..", url='https://xn--b1aaffobumib0c5a.xn--p1ai/vdohnovitel/70'))
+        
+        bot.send_photo(callback.message.chat.id, photo_ruslan_bairamov, reply_markup=line)
+
+        bot.register_next_step_handler(callback.message, mes_menu)
+
+    elif callback.data == 'АннаВязун':
+   
+
+        line = types.InlineKeyboardMarkup()
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+        bot.send_message(callback.message.chat.id, 'Анна Вязун – 11-классница школы № 80 Ростова-на-Дону и одна из самых молодых предпринимателей Ростовской области. В 13 лет она уже открыла свой первый бизнес: онлайн-магазин AsTeacherSayShop. А сейчас является ещё и самым молодым спикером Ростовской области в направлении «Молодёжное предпринимательство».', reply_markup=markup)
+                
+        
+        line.add(types.InlineKeyboardButton("Подробнее..", url='https://xn--b1aaffobumib0c5a.xn--p1ai/vdohnovitel/20'))
+        
+        
+        bot.send_photo(callback.message.chat.id, photo_Vyazun_Anna, reply_markup=line)
+
+        print(callback.message.text)
+        bot.register_next_step_handler(callback.message, mes_menu)
+
+# меню
+def menu(message):
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    btn2 = types.KeyboardButton("Нажми, чтобы увидеть вдохновителей") 
+    btn4 = types.KeyboardButton("Немного о движении первых..")
+    btn5 = types.KeyboardButton("Немного о движении первых..")
+    btn1 = types.KeyboardButton("Немного о движении первых..")
+
+
+    markup.row(btn1,btn4)
+    markup.row(btn2, btn5)
+    
+    bot.send_message(message.chat.id, 'Выбери нужную кнопку и нажми на неё! \
+Если у тебя есть специальная команда, то просто введи и отправь её. \
+Найти команду ты можешь на информационном стенде любого мероприятия вдохновителей.(пример команды для ввода: /gagarin)',reply_markup=markup)
+    
+
+    # bot.register_next_step_handler(message, on_click) 
+   # on_click(message)
+
+# переход в функции из кнопок
+@bot.message_handler(func=lambda message: True)
+def on_click(message):
+
+    if message.text == "Немного о движении первых..":   
+
+        dvizh(message)
+
+    elif message.text == "Нажми, чтобы увидеть вдохновителей":
+
+        vdoh(message)
+
+# блок движения первых
+def dvizh(message):
+
+        file_first = open('./pervie.jpg','rb')
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        line = types.InlineKeyboardMarkup()
+
+        btn_s = types.InlineKeyboardButton("Ссылка на сайт движения", url = 'https://bolshayaperemena.online/lk/contest/team-competition/case/1636')
+        btn_menu = types.KeyboardButton("В меню")
+
+        line.add(btn_s)
+        markup.row(btn_menu)
+
+        bot.send_message(message.chat.id, '«Движение Первых» — это сотни уникальных программ воспитания и становления личности, активного и ответственного молодежного сообщества, для которого важны уважение к традициям и культурам народов России, историческая преемственность и сопричастность с судьбой страны, в которой главной ценностью была, есть и будет – семья. Всегда на связи!')
+        bot.send_message(message.chat.id, 'Также Вы можете узнать больше о Движении на официальном сайте Движения Первых', reply_markup=markup)
+
+        bot.send_photo(message.chat.id, file_first, reply_markup=line)
+        
+        bot.register_next_step_handler(message, menu)
+
+# блок вдохновителей
+def vdoh(message):
+        
+
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        line = types.InlineKeyboardMarkup()
+        reply_markup=types.ReplyKeyboardRemove()
+
+        btn_menu = types.KeyboardButton("В меню")
+        markup.row(btn_menu)
+        
+        line.add(types.InlineKeyboardButton("Руслан Байрамов \nГород: Азербайджан, с.Новоивановка", callback_data='РусланБайрамов'))
+        line.add((types.InlineKeyboardButton("Анна Вязун \nГород: Ростов-на-Дону", callback_data='АннаВязун')))
+
+        bot.send_message(message.chat.id, "Вот несколько вдохновителей, нажимай на их имена, чтобы узнать о них больше!", reply_markup=line)
+        bot.send_message(message.chat.id, 'Для возвращения в меню нажми кнопку', reply_markup=markup)
+        
+        
+bot.skip_pending = True
+bot.polling(none_stop=True)
