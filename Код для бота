@@ -2,7 +2,9 @@ import telebot
 from telebot import types
 from time import sleep
 # Создаем объект бота и передаем ему токен нашего бота
-bot = telebot.TeleBot('6689311820:AAHQ6A1jJfm3USxTvljRIBZ0GVWz1hqs0Nc')
+
+API_TOKEN = ''#токен из ботфазера
+bot = telebot.TeleBot(API_TOKEN)
 
 point = 0
 max_point = -100
@@ -273,12 +275,12 @@ def callback_message(callback):
 # меню
 def menu(message):
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup()
 
     btn2 = types.KeyboardButton("Нажми, чтобы увидеть вдохновителей") 
-    btn4 = types.KeyboardButton("Немного о движении первых..")
+    btn4 = types.KeyboardButton("Больше о вдохновителях!")
     btn5 = types.KeyboardButton("Немного о движении первых..")
-    btn1 = types.KeyboardButton("Немного о движении первых..")
+    btn1 = types.KeyboardButton("Календарь мероприятий")
 
 
     markup.row(btn1,btn4)
